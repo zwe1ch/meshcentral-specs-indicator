@@ -1,14 +1,13 @@
 (function () {
   // Name muss mit dem Hook im Plugin JS übereinstimmen
-  parent.expose = ["addTestColumn"];
+  parent.expose = ["addSpecsIndicator"];
 
   exports.addTestColumn = function (MC) {
     MC.api.goPageEnd((pageId, ev) => {
       console.log("x");
-      console.log(pageId);
+      console.log("addSpecsIndicator", pageId);
       if (pageId !== MC.tabs.deviceListPageId) return;
 
-      // Falls Kopfzeile noch fehlt ▒~@~S die Spaltenüberschrift einfügen
       const header = document.querySelector("thead tr");
       if (!header || header.querySelector('th[data-col="testx"]')) return;
 
