@@ -13,7 +13,7 @@ module.exports.sample = function (parent) {
   obj.parent = parent; // keep a reference to the parent
   obj.exports = [
     "onDesktopDisconnect",
-    "foo" // export this function to the web UI
+    "onWebUIStartupEnd" // export this function to the web UI
   ];
 
   obj.onDesktopDisconnect = function () {
@@ -23,7 +23,7 @@ module.exports.sample = function (parent) {
     focusTextBox("d2devEvent");
   };
 
-  obj.foo = function () {
+  obj.onWebUIStartupEnd = function () {
     console.log("moep");
   };
 
