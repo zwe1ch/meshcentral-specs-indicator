@@ -1,7 +1,7 @@
 {
   "name": "Specs Indicator",
   "shortName": "specs-indicator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Rayk Jackisch",
   "description": "coming soon™",
   "hasAdminPanel": false,
@@ -14,5 +14,5 @@
     "url": "https://github.com/zwe1ch/meshcentral-specs-indicator.git"
   },
   "versionHistoryUrl": "https://github.com/zwe1ch/meshcentral-specs-indicator/tags",
-  "meshCentralCompat": ">0.4.3"
+  "meshCentralCompat": ">=0.9.98"
 }
