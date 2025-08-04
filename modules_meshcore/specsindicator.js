@@ -2,7 +2,7 @@
   // Name muss mit dem Hook im Plugin JS übereinstimmen
   parent.expose = ["addSpecsIndicator"];
 
-  exports.addTestColumn = function (MC) {
+  exports.addSpecsIndicator = function (MC) {
     MC.api.goPageEnd((pageId, ev) => {
       console.log("x");
       console.log("addSpecsIndicator", pageId);
