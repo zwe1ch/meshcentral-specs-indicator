@@ -6,7 +6,7 @@
   "description": "coming soon™",
   "hasAdminPanel": false,
   "homepage": "https://github.com/zwe1ch/meshcentral-specs-indicator",
-  "changelogUrl": "https://raw.githubusercontent.com/zwe1ch/meshcentral-specs-indicator/master/CHANGELOG.md",
+  "changelogUrl": "https://raw.githubusercontent.com/zwe1ch/meshcentral-specs-indicator/refs/heads/master/CHANGELOG.md",
   "configUrl": "https://raw.githubusercontent.com/zwe1ch/meshcentral-specs-indicator/refs/heads/master/config.json",
   "downloadUrl": "https://github.com/zwe1ch/meshcentral-specs-indicator/archive/refs/heads/master.zip",
   "repository": {
