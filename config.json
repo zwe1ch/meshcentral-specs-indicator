@@ -1,0 +1,18 @@
+{
+  "name": "Specs Indicator",
+  "shortName": "specs-indicator",
+  "version": "0.0.1",
+  "author": "Rayk Jackisch",
+  "description": "coming soon™",
+  "hasAdminPanel": false,
+  "homepage": "https://github.com/zwe1ch/meshcentral-specs-indicator",
+  "changelogUrl": "https://raw.githubusercontent.com/zwe1ch/meshcentral-specs-indicator/master/CHANGELOG.md",
+  "configUrl": "https://raw.githubusercontent.com/zwe1ch/meshcentral-specs-indicator/master/config.json",
+  "downloadUrl": "https://github.com/zwe1ch/meshcentral-specs-indicator/archive/refs/heads/master.zip",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zwe1ch/meshcentral-specs-indicator.git"
+  },
+  "versionHistoryUrl": "https://github.com/zwe1ch/meshcentral-specs-indicator/tags",
+  "meshCentralCompat": ">0.4.3"
+}
