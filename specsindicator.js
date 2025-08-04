@@ -1,26 +1,22 @@
+/**
+ * MeshCentral Plugin: Console Log
+ * Schreibt beim Laden der MeshCentral-Web-UI eine Log-Nachricht in die Browser-Konsole.
+ */
 module.exports = function (parent, plugin) {
-  // 1. Funktion exportieren
-  plugin.exports = ["addSpecsIndicator"];
-  // 2. Browser-Code definieren
-  plugin.addSpecsIndicator = function (MC) {
+  // 1) Hier die Funktion benennen, die im Browser verfügbar sein soll
+  plugin.exports = ["logOnDeviceList"];
+
+  // 2) Implementierung der Browser-Funktion
+  plugin.logOnDeviceList = function (MC) {
     MC.api.goPageEnd((pageId, ev) => {
-      console.log("addSpecsIndicator", pageId);
+      // Nur auf der "Meine Geräte"-Seite ausführen
       if (pageId !== MC.tabs.deviceListPageId) return;
-      const header = document.querySelector("thead tr");
-      if (!header || header.querySelector('th[data-col="testx"]')) return;
-      header.insertAdjacentHTML("beforeend", '<th data-col="testx" style="width:2em; text-align:center">X</th>');
-      document.querySelectorAll("tbody tr").forEach((tr) => {
-        if (tr.querySelector('td[data-col="testx"]')) return;
-        const td = document.createElement("td");
-        td.dataset.col = "testx";
-        td.textContent = "x";
-        td.style.textAlign = "center";
-        tr.appendChild(td);
-      });
+      console.log(">> ConsoleLog Plugin aktiv auf Seite:", pageId);
     });
   };
-  // 3. Hook beim UI-Start
+
+  // 3) Hook nach dem vollständigen Laden der Web-UI
   plugin.onWebUIStartupEnd = () => {
-    parent.addSpecsIndicator();
+    parent.logOnDeviceList();
   };
 };
