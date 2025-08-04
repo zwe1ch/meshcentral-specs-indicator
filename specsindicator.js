@@ -1,22 +1,31 @@
 /**
- * MeshCentral Plugin: Console Log
- * Schreibt beim Laden der MeshCentral-Web-UI eine Log-Nachricht in die Browser-Konsole.
+ * @description MeshCentral Sample Plugin
+ * @author Ryan Blenis
+ * @copyright
+ * @license Apache-2.0
+ * @version v0.0.1
  */
-module.exports = function (parent, plugin) {
-  // 1) Hier die Funktion benennen, die im Browser verfügbar sein soll
-  plugin.exports = ["logOnDeviceList"];
 
-  // 2) Implementierung der Browser-Funktion
-  plugin.logOnDeviceList = function (MC) {
-    MC.api.goPageEnd((pageId, ev) => {
-      // Nur auf der "Meine Geräte"-Seite ausführen
-      if (pageId !== MC.tabs.deviceListPageId) return;
-      console.log(">> ConsoleLog Plugin aktiv auf Seite:", pageId);
-    });
+"use strict";
+
+module.exports.sample = function (parent) {
+  var obj = {};
+  obj.parent = parent; // keep a reference to the parent
+  obj.exports = [
+    "onDesktopDisconnect",
+    "foo" // export this function to the web UI
+  ];
+
+  obj.onDesktopDisconnect = function () {
+    // this is called when the desktop disconnect button is clicked
+    writeDeviceEvent(encodeURIComponent(currentNode._id)); // mimic what the button does on the device main page to pull up a log
+    Q("d2devEvent").value = Date().toLocaleString() + ": "; // pre-fill the date for a timestamp
+    focusTextBox("d2devEvent");
   };
 
-  // 3) Hook nach dem vollständigen Laden der Web-UI
-  plugin.onWebUIStartupEnd = () => {
-    parent.logOnDeviceList();
+  obj.foo = function () {
+    console.log("moep");
   };
+
+  return obj;
 };
