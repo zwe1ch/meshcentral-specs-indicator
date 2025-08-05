@@ -1,91 +1,29 @@
-"use strict";
-
 module.exports.specsindicator = function (parent) {
-  var obj = {};
-  obj.parent = parent;
-  obj.meshServer = parent.parent;
-  obj.db = null;
+  var plugin = {};
+  plugin.parent = parent;
+  plugin.meshServer = parent.parent;
+  plugin.db = null;
 
-  // obj.exports = ["registerPluginTab", "fe_on_message", "_pluginPermissions", "loadButtons", "onWebUIStartupEnd", "goPageStart", "goPageEnd"];
-  obj.exports = ["_pluginPermissions", "loadButtons", "onWebUIStartupEnd", "goPageStart", "goPageEnd"];
+  const ver = 13;
+  plugin.exports = ["onWebUIStartupEnd", "goPageStart", "goPageEnd"];
 
-  obj._pluginPermissions = function () {};
-
-  obj.onWebUIStartupEnd = function () {
-    this.leftMenuActiveClass = "lbbuttonsel2";
-    this.pluginButtons = {
-      7: {
-        name: "LeftMenuMonitoringStatus",
-        title: "Monitoring Status",
-        icon64: "system-monitor-64.png"
-      }
-    };
-    console.log("onWebUIStartupEnd: Is this run on the server or browser? YOOOOO");
-    console.log(obj);
-    console.log(this);
-
-    // for (const button in this.pluginButtons) {
-    //   var thisContentIndex = button;
-    //   let pageLeftbar = document.getElementById("page_leftbar");
-    //   let newButton = document.createElement("div");
-    //   newButton.id = this.pluginButtons[thisContentIndex].name;
-    //   newButton.className = "lbbutton";
-    //   newButton.tabindex = 0;
-    //   newButton.title = this.pluginButtons[thisContentIndex].title;
-    //   newButton.style.display = "normal";
-
-    //   newButton.onclick = function () {
-    //     console.log(thisContentIndex);
-    //     go(thisContentIndex, event);
-    //   };
-    //   let newButtonImage = document.createElement("div");
-    //   newButtonImage.className = "lb" + thisContentIndex;
-    //   newButtonImage.style.background = "url(../images/" + this.pluginButtons[thisContentIndex].icon64 + ")";
-    //   newButtonImage.style.display = "block";
-    //   newButtonImage.style.width = "62px";
-    //   newButtonImage.style.height = "62px";
-    //   newButtonImage.style.cursor = "pointer";
-    //   newButtonImage.style.border = "none";
-    //   newButtonImage.style.top = "6px";
-    //   newButtonImage.style.left = "6px";
-    //   newButtonImage.style.position = "absolute";
-    //   newButton.appendChild(newButtonImage);
-    //   pageLeftbar.appendChild(newButton);
-
-    //   let columnL = document.getElementById("column_l");
-    //   let newContent = document.createElement("div");
-    //   newContent.id = "p" + thisContentIndex;
-    //   newContent.style.display = "none";
-    //   newContent.innerText = "new object: p" + thisContentIndex;
-    //   columnL.appendChild(newContent);
-    // }
+  plugin.onWebUIStartupEnd = function () {
+    console.log("onWebUIStartupEnd: " + ver);
   };
 
-  obj.goPageStart = function (index, event) {
-    for (const button in this.pluginButtons) {
-      if (document.getElementById(this.pluginButtons[button].name)) {
-        QC(this.pluginButtons[button].name).remove(this.leftMenuActiveClass);
-      }
-    }
+  plugin.goPageStart = function (index, event) {
+    console.log("goPageStart: " + ver);
+    console.log("index: " + index);
   };
 
-  obj.goPageEnd = function (index, event) {
-    if (index in this.pluginButtons) {
-      QC(this.pluginButtons[index].name).add(this.leftMenuActiveClass);
-    }
+  plugin.goPageEnd = function (index, event) {
+    console.log("goPageEnd: " + ver);
+    console.log("index: " + index);
   };
 
-  obj.server_startup = function () {};
-
-  obj.consoleaction = function () {};
-
-  obj.handleAdminReq = function (req, res, user) {
-    //require(__dirname + '/admin.js').admin(obj).req(req, res, user);
+  plugin.server_startup = function () {
+    console.log("foooooooooooooooooooooooooo");
   };
 
-  obj.loadButtons = function (config) {
-    //console.log("loadButtons: Is this run on the server or browser?");
-  };
-
-  return obj;
+  return plugin;
 };
