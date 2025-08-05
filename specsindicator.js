@@ -25,9 +25,11 @@ module.exports.specsindicator = function (parent) {
     const table = document.querySelector("#xdevices > table");
 
     if (!table) {
-      console.log("tabelle nicht gefunden");
+      console.log("table not found");
 
       return;
+    } else {
+      console.log("table ok");
     }
 
     console.log(table);
