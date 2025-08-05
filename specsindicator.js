@@ -1,3 +1,32 @@
+function waitForSelector(selector, { timeout = 5000 } = {}) {
+  return new Promise((resolve, reject) => {
+    // Sofort prüfen
+    const el = document.querySelector(selector);
+    if (el) return resolve(el);
+
+    // Observer einrichten
+    const observer = new MutationObserver(() => {
+      const found = document.querySelector(selector);
+      if (found) {
+        observer.disconnect();
+        clearTimeout(timer);
+        resolve(found);
+      }
+    });
+
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true
+    });
+
+    // Timeout, falls nichts kommt
+    const timer = setTimeout(() => {
+      observer.disconnect();
+      reject(new Error(`Timeout: Selector "${selector}" nicht gefunden`));
+    }, timeout);
+  });
+}
+
 module.exports.specsindicator = function (parent) {
   var plugin = {};
   plugin.parent = parent;
@@ -22,26 +51,35 @@ module.exports.specsindicator = function (parent) {
       return;
     }
 
-    const table = document.querySelector("#xdevices > table");
+    waitForSelector("#xdevices > table")
+      .then((table) => {
+        console.log("Tabelle ist da:", table);
+        // hier weiterarbeiten…
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
-    if (!table) {
-      console.log("table not found");
+    // const table = document.querySelector("#xdevices > table");
 
-      return;
-    } else {
-      console.log("table ok");
-    }
+    // if (!table) {
+    //   console.log("table not found");
 
-    console.log(table);
+    //   return;
+    // } else {
+    //   console.log("table ok");
+    // }
 
-    Array.from(table.rows).forEach((row) => {
-      console.log(row);
-      // // row.insertCell(1) erzeugt eine neue <td> an Spaltenindex 1
-      // const newCell = row.insertCell(1);
-      // // Optional: Inhalt oder Attribute setzen
-      // newCell.textContent = "xx"; // z.B. leer
-      // // newCell.classList.add('meine-klasse');
-    });
+    // console.log(table);
+
+    // Array.from(table.rows).forEach((row) => {
+    //   console.log(row);
+    //   // // row.insertCell(1) erzeugt eine neue <td> an Spaltenindex 1
+    //   // const newCell = row.insertCell(1);
+    //   // // Optional: Inhalt oder Attribute setzen
+    //   // newCell.textContent = "xx"; // z.B. leer
+    //   // // newCell.classList.add('meine-klasse');
+    // });
   };
 
   plugin.server_startup = function () {
