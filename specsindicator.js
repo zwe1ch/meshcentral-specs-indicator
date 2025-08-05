@@ -62,6 +62,7 @@ module.exports.specsindicator = function (parent) {
       for (const m of mutations) {
         for (const n of m.addedNodes) {
           if (n.nodeType === 1 && n.tagName === "TR") {
+            console.log("dd");
             addColumn(n);
           }
         }
