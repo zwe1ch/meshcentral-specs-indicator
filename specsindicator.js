@@ -24,14 +24,21 @@ module.exports.specsindicator = function (parent) {
 
     const table = document.querySelector("#xdevices > table");
 
+    if (!table) {
+      console.log("tabelle nicht gefunden");
+
+      return;
+    }
+
     console.log(table);
 
     Array.from(table.rows).forEach((row) => {
-      // row.insertCell(1) erzeugt eine neue <td> an Spaltenindex 1
-      const newCell = row.insertCell(1);
-      // Optional: Inhalt oder Attribute setzen
-      newCell.textContent = "xx"; // z.B. leer
-      // newCell.classList.add('meine-klasse');
+      console.log(row);
+      // // row.insertCell(1) erzeugt eine neue <td> an Spaltenindex 1
+      // const newCell = row.insertCell(1);
+      // // Optional: Inhalt oder Attribute setzen
+      // newCell.textContent = "xx"; // z.B. leer
+      // // newCell.classList.add('meine-klasse');
     });
   };
 
