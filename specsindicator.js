@@ -6,41 +6,9 @@ module.exports.specsindicator = function (parent) {
   plugin.meshServer = parent.parent;
   plugin.db = null;
 
-  // 1) Nun auch unseren Helfer exportieren:
-  plugin.exports = [
-    "onWebUIStartupEnd",
-    "goPageStart",
-    "goPageEnd",
-    "waitForSelector" // <<< hier mit hinzufügen
-  ];
+  // Nur diese Hooks werden in die Web-UI gebündelt:
+  plugin.exports = ["onWebUIStartupEnd", "goPageStart", "goPageEnd"];
 
-  // 2) Helfer definieren – wird in den WebUI-Bundle aufgenommen
-  plugin.waitForSelector = function (selector, { timeout = 5000 } = {}) {
-    return new Promise((resolve, reject) => {
-      const el = document.querySelector(selector);
-      if (el) return resolve(el);
-
-      const observer = new MutationObserver(() => {
-        const found = document.querySelector(selector);
-        if (found) {
-          observer.disconnect();
-          clearTimeout(timer);
-          resolve(found);
-        }
-      });
-      observer.observe(document.documentElement, {
-        childList: true,
-        subtree: true
-      });
-
-      const timer = setTimeout(() => {
-        observer.disconnect();
-        reject(new Error(`Timeout: Selector "${selector}" nicht gefunden`));
-      }, timeout);
-    });
-  };
-
-  // 3) Hooks, die MeshCentral ins UI lädt
   plugin.onWebUIStartupEnd = function () {
     console.log("onWebUIStartupEnd");
   };
@@ -50,15 +18,45 @@ module.exports.specsindicator = function (parent) {
   };
 
   plugin.goPageEnd = async function (index, event) {
-    console.log(`goPageEnd(index: ${index}, event: ${event})`);
+    console.log(`goPageEnd(index: ${index})`);
     if (index !== 1) return;
 
+    // Helper-Funktion direkt hier drin definieren
+    function waitForSelector(selector, { timeout = 5000 } = {}) {
+      return new Promise((resolve, reject) => {
+        // Sofort prüfen
+        const el = document.querySelector(selector);
+        if (el) return resolve(el);
+
+        // Observer einrichten
+        let timer;
+        const observer = new MutationObserver(() => {
+          const found = document.querySelector(selector);
+          if (found) {
+            observer.disconnect();
+            clearTimeout(timer);
+            resolve(found);
+          }
+        });
+        observer.observe(document.documentElement, {
+          childList: true,
+          subtree: true
+        });
+
+        // Timeout, falls nichts kommt
+        timer = setTimeout(() => {
+          observer.disconnect();
+          reject(new Error(`Timeout: Selector "${selector}" nicht gefunden`));
+        }, timeout);
+      });
+    }
+
     try {
-      // 4) Jetzt wirklich über die Closure-Variable aufrufen:
-      const table = await plugin.waitForSelector("#xdevices > table", { timeout: 8000 });
+      // Und hier rufen wir ihn auf – jetzt reliably im Scope:
+      const table = await waitForSelector("#xdevices > table", { timeout: 8000 });
       console.log("Tabelle gefunden:", table);
 
-      // Beispiel: neue Zelle in jeder Zeile einfügen
+      // Beispiel: In jede Zeile an Position 1 eine neue Zelle einfügen
       Array.from(table.rows).forEach((row) => {
         const newCell = row.insertCell(1);
         newCell.textContent = "xx";
@@ -68,6 +66,7 @@ module.exports.specsindicator = function (parent) {
     }
   };
 
+  // Dieser Hook läuft nur auf der Server-Seite und wird nicht in die Web-UI gebündelt
   plugin.server_startup = function () {
     console.log("Server gestartet");
   };
