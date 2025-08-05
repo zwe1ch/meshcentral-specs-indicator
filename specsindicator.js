@@ -1,14 +1,10 @@
 module.exports.specsindicator = function (parent) {
-  var plugin = {};
-  plugin.parent = parent;
-  plugin.meshServer = parent.parent;
-  plugin.db = null;
-
-  // 1) Helfer ans Plugin binden
-  plugin.waitForSelector = function (selector, { timeout = 5000 } = {}) {
+  // 1) Helfer hier im Closure deklarieren
+  function waitForSelector(selector, { timeout = 5000 } = {}) {
     return new Promise((resolve, reject) => {
       const el = document.querySelector(selector);
       if (el) return resolve(el);
+
       const observer = new MutationObserver(() => {
         const found = document.querySelector(selector);
         if (found) {
@@ -18,14 +14,19 @@ module.exports.specsindicator = function (parent) {
         }
       });
       observer.observe(document.documentElement, { childList: true, subtree: true });
+
       const timer = setTimeout(() => {
         observer.disconnect();
         reject(new Error(`Timeout: Selector "${selector}" nicht gefunden`));
       }, timeout);
     });
-  };
+  }
 
-  // 2) Nur diese Hooks exportieren
+  // 2) Plugin-Objekt und exports
+  var plugin = {};
+  plugin.parent = parent;
+  plugin.meshServer = parent.parent;
+  plugin.db = null;
   plugin.exports = ["onWebUIStartupEnd", "goPageStart", "goPageEnd"];
 
   plugin.onWebUIStartupEnd = function () {
@@ -36,14 +37,15 @@ module.exports.specsindicator = function (parent) {
     console.log("goPageStart", index, event);
   };
 
-  // 3) Hier nutzen wir `this.waitForSelector`
+  // 3) goPageEnd ruft den Closure-Helper direkt auf
   plugin.goPageEnd = async function (index, event) {
     console.log(`goPageEnd(index: ${index})`);
     if (index !== 1) return;
 
     try {
-      const table = await this.waitForSelector("#xdevices > table", { timeout: 8000 });
+      const table = await waitForSelector("#xdevices > table", { timeout: 8000 });
       console.log("Tabelle gefunden:", table);
+
       Array.from(table.rows).forEach((row) => {
         const newCell = row.insertCell(1);
         newCell.textContent = "xx";
